@@ -44,7 +44,23 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
+	bool gameRunning  = true;
+	SDL_event event;
 
+	while (gameRunning)
+	{
+		while(SDL_PollEvent(&event))
+		{
+			switch (event.type)
+			{
+				case SDL_QUIT:
+					gameRunning = false;
+					break;
+			}
+		}
+	}
 
+	SDL_DestroyWindow(window);
+	SDL_Quit();
 	return 0;
 }
