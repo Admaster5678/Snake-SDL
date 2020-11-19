@@ -34,6 +34,7 @@ int main(int argc, char *argv[])
 	const int windowWidth = 600;
 	const int windowHeight = 700;
 	const Vector2f size(20, 20);
+	const int d = 10;
 
 	SDL_Window* window = NULL;
 	window = SDL_CreateWindow("Snake", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowWidth, windowHeight, SDL_WINDOW_SHOWN);
@@ -68,7 +69,64 @@ int main(int argc, char *argv[])
 				case SDL_QUIT:
 					gameRunning = false;
 					break;
+				case SDL_KEYDOWN:
+					switch (event.key.keysym.sym)
+					{
+						case SDLK_ESCAPE:
+							gameRunning = false;
+							break;
+						case SDLK_RIGHT:
+							if (snake.getDir() != LEFT)
+								snake.setDir(RIGHT);
+							break;
+						case SDLK_d:
+							if (snake.getDir() != LEFT)
+								snake.setDir(RIGHT);
+							break;
+						case SDLK_LEFT:
+							if (snake.getDir() != RIGHT)
+								snake.setDir(LEFT);
+							break;
+						case SDLK_a:
+							if (snake.getDir() != RIGHT)
+								snake.setDir(LEFT);
+							break;
+						case SDLK_DOWN:
+							if (snake.getDir() != UP)
+								snake.setDir(DOWN);
+							break;
+						case SDLK_s:
+							if (snake.getDir() != UP)
+								snake.setDir(DOWN);
+							break;
+						case SDLK_UP:
+							if (snake.getDir() != DOWN)
+								snake.setDir(UP);
+							break;
+						case SDLK_w:
+							if (snake.getDir() != DOWN)
+								snake.setDir(UP);
+							break;					
+					}
 			}
+		}
+
+		switch (snake.getDir())
+		{
+			case RIGHT:
+				snake.setPos(Vector2f(snake.getPos().getX()+d, snake.getPos().getY()));
+				break;
+			case LEFT:
+				snake.setPos(Vector2f(snake.getPos().getX()-d, snake.getPos().getY()));
+				break;
+			case UP:
+				snake.setPos(Vector2f(snake.getPos().getX(), snake.getPos().getY()-d));
+				break;
+			case DOWN:
+				snake.setPos(Vector2f(snake.getPos().getX(), snake.getPos().getY()+d));
+				break;
+			default:
+				std::cout << "GIMME DIR\n";
 		}
 
 		SDL_RenderClear(renderer);
