@@ -34,3 +34,6 @@
 # Sublime Text Project Files
 *.sublime-project
 *.sublime-workspace
+
+# Release ZIPs
+*.zip
