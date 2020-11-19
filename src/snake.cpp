@@ -1,3 +1,5 @@
+#include <Stuff.hpp>
+
 #include "Snake.hpp"
 
 Snake::Snake()
