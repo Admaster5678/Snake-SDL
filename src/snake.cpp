@@ -4,7 +4,7 @@
 
 Snake::Snake()
 {
-	pos = Vector2f(300, 350);
+	pos = Vector2f(300-10, 350-10);
 }
 
 void Snake::setDir(Direction p_dir)
