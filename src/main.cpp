@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 	}
 
 	bool gameRunning  = true;
-	SDL_event event;
+	SDL_Event event;
 
 	while (gameRunning)
 	{
