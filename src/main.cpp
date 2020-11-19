@@ -6,8 +6,45 @@
 
 int main(int argc, char *argv[])
 {
-	if (SDL_Init(SDL_INIT_VIDEO) != 0)
+	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
+	{
 		std::cout << "SDL_Init Failed. Error Code: " << SDL_GetError() << std::endl;
+		return 1;
+	}
+
+	if (!IMG_Init(IMG_INIT_PNG))
+	{
+		std::cout << "IMG_Init Failed. Error Code: " << SDL_GetError() << std::endl;
+		return 1;
+	}
+
+	if (TTF_Init() != 0)
+	{
+		std::cout << "TTF_Init failed. Error Code: " << SDL_GetError() << std::endl;
+	}
+
+	const int windowWidth = 600;
+	const int windowHeight = 700;
+
+	SDL_Window* window = NULL;
+	window = SDL_CreateWindow("Snake", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowWidth, windowHeight, SDL_WINDOW_SHOWN);
+
+	if (window == NULL)
+	{
+		std::cout << "Window Initialization Failed. Error Code: " << SDL_GetError() << std::endl;
+		return 1;
+	}
+
+	SDL_Renderer* renderer = NULL;
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+
+	if (renderer == NULL)
+	{
+		std::cout << "Renderer Initialization Failed. Error Code: " << SDL_GetError() << std::endl;
+		return 1;
+	}
+
+
 
 	return 0;
 }
