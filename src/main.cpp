@@ -33,8 +33,8 @@ int main(int argc, char *argv[])
 
 	const int windowWidth = 600;
 	const int windowHeight = 700;
-	const Vector2f size(20, 20);
-	const int d = 10;
+	const int size = 20;
+	const int d = 5;
 
 	SDL_Window* window = NULL;
 	window = SDL_CreateWindow("Snake", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowWidth, windowHeight, SDL_WINDOW_SHOWN);
@@ -128,9 +128,18 @@ int main(int argc, char *argv[])
 			default:
 				std::cout << "GIMME DIR\n";
 		}
+		if (snake.getPos().getX() < 0)
+			snake.setPos(Vector2f(windowWidth - size, snake.getPos().getY()));
+		else if (snake.getPos().getX() >= windowWidth)
+			snake.setPos(Vector2f(0, snake.getPos().getY()));
+
+		if (snake.getPos().getY() < 0)
+			snake.setPos(Vector2f(snake.getPos().getX(), windowHeight-size));
+		else if (snake.getPos().getY() >= windowHeight)
+			snake.setPos(Vector2f(snake.getPos().getX(), 0));
 
 		SDL_RenderClear(renderer);
-		render(renderer, snakeTex, snake.getPos(), size);
+		render(renderer, snakeTex, snake.getPos(), Vector2f(size, size));
 		SDL_RenderPresent(renderer);
 	}
 
