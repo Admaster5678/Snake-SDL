@@ -3,9 +3,11 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
 #include <iostream>
+#include <vector>
 
 #include "Snake.hpp"
-#include <Stuff.hpp>
+#include "Stuff.hpp"
+#include "Fruit.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -49,14 +51,19 @@ int main(int argc, char *argv[])
 		std::cout << "Renderer Initialization Failed. Error Code: " << SDL_GetError() << std::endl;
 		return 1;
 	}
+
 	Snake snake;
 	SDL_Texture* snakeTex = loadTexture("res/gfx/snakeTex.png", renderer);
+	SDL_Texture* fruitTex = loadTexture("res/gfx/fruitTex.png", renderer);
+	std::vector<Fruit> fruits;
+	int frameCount = 0;
 
 	bool gameRunning  = true;
 	SDL_Event event;
 
 	while (gameRunning)
 	{
+		frameCount++;
 		while(SDL_PollEvent(&event))
 		{
 			switch (event.type)
@@ -134,8 +141,29 @@ int main(int argc, char *argv[])
 			snake.setPos(Vector2f(snake.getPos().getX(), 0));
 
 		SDL_RenderClear(renderer);
+
+		if (frameCount >= 250)
+		{
+			frameCount = 0;
+			fruits.push_back(Fruit(Vector2f(rand() % windowWidth, rand() % windowHeight)));
+		}
+
+		for (unsigned i = 0; i < fruits.size(); i++)
+		{
+			fruits[i].timeAlive--;
+			if (fruits[i].timeAlive <= 0)
+				fruits.erase(fruits.begin() + i);
+
+			if (snake.getPos().getX() + size > fruits[i].getPos().getX() && snake.getPos().getX() < fruits[i].getPos().getX() + size && snake.getPos().getY() + size > fruits[i].getPos().getY() && snake.getPos().getY() < fruits[i].getPos().getY() + size)
+				fruits.erase(fruits.begin() + i);
+
+			render(renderer, fruitTex, fruits[i].getPos(), Vector2f(size, size));
+		} 
+
+
 		render(renderer, snakeTex, snake.getPos(), Vector2f(size, size));
 		SDL_RenderPresent(renderer);
+		std::cout << frameCount << std::endl;
 	}
 
 	SDL_DestroyTexture(snakeTex);
