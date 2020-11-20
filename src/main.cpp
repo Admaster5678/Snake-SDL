@@ -132,12 +132,12 @@ int main(int argc, char *argv[])
 		}
 		if (snake.getPos().getX() < 0)
 			snake.setPos(Vector2f(windowWidth - size, snake.getPos().getY()));
-		else if (snake.getPos().getX() >= windowWidth)
+		else if (snake.getPos().getX() + size > windowWidth)
 			snake.setPos(Vector2f(0, snake.getPos().getY()));
 
 		if (snake.getPos().getY() < 0)
 			snake.setPos(Vector2f(snake.getPos().getX(), windowHeight-size));
-		else if (snake.getPos().getY() >= windowHeight)
+		else if (snake.getPos().getY() + size > windowHeight)
 			snake.setPos(Vector2f(snake.getPos().getX(), 0));
 
 		SDL_RenderClear(renderer);
