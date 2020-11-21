@@ -65,13 +65,15 @@ int main(int argc, char *argv[])
 	Mix_Chunk* munch = loadSoundEffect("res/dev/munch.mp3");
 	std::vector<Fruit> fruits;
 	int frameCount = 0;
-
+	int timeCount = 0;
+	int score = 0;
 	bool gameRunning  = true;
 	SDL_Event event;
 
 	while (gameRunning)
 	{
 		frameCount++;
+		timeCount++;
 		while(SDL_PollEvent(&event))
 		{
 			switch (event.type)
@@ -165,8 +167,12 @@ int main(int argc, char *argv[])
 			if (snake.getPos().getX() + size > fruits[i].getPos().getX() && snake.getPos().getX() < fruits[i].getPos().getX() + size && snake.getPos().getY() + size > fruits[i].getPos().getY() && snake.getPos().getY() < fruits[i].getPos().getY() + size)
 			{
 				fruits.erase(fruits.begin() + i);
+				score++;
 				Mix_PlayChannel(-1, munch, 0);
 			}
+
+			if (timeCount == 2000)
+				gameRunning = false;
 
 			render(renderer, fruitTex, fruits[i].getPos(), Vector2f(size, size));
 		} 
@@ -176,6 +182,7 @@ int main(int argc, char *argv[])
 		SDL_RenderPresent(renderer);
 		std::cout << frameCount << std::endl;
 	}
+
 
 	Mix_FreeChunk(munch);
 	SDL_DestroyTexture(fruitTex);
