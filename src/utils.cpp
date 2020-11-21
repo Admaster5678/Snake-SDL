@@ -1,8 +1,10 @@
-#include <SDL2/SDL.h>
+#include <SDL2/SDl.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
 #include <iostream>
 
-#include "Stuff.hpp"
+#include "Utils.hpp"
 
 Vector2f::Vector2f()
 :x(0.0f), y(0.0f){}
@@ -34,4 +36,16 @@ SDL_Texture* loadTexture(const char* p_filePath, SDL_Renderer* renderer)
 	}
 
 	return texture;
+}
+
+Mix_Chunk* loadSoundEffect(const char* p_filePath)
+{
+	Mix_Chunk* sound = NULL;
+	sound = Mix_LoadWAV(p_filePath);
+
+	if (sound == NULL)
+	{
+		std::cout << "FAILED TO LOAD SOUNDS. PLEASE INFORM DEVS. ERROR: " << SDL_GetError() << std::endl;
+	}
+	return sound;
 }

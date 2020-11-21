@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "Snake.hpp"
-#include "Stuff.hpp"
+#include "Utils.hpp"
 #include "Fruit.hpp"
 
 int main(int argc, char *argv[])
@@ -26,7 +26,14 @@ int main(int argc, char *argv[])
 	if (TTF_Init() != 0)
 	{
 		std::cout << "TTF_Init failed. Error Code: " << SDL_GetError() << std::endl;
+		return 1;
 	}
+
+	if(Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) != 0)
+    {
+    	std::cout << "Mix_OpenAudio failed. Error Code: " << SDL_GetError() << std::endl;
+        return 1;
+    }
 
 	const int windowWidth = 600;
 	const int windowHeight = 700;
@@ -52,9 +59,10 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	Snake snake;
+	Snake snake(Vector2f(windowWidth/2, windowHeight/2));
 	SDL_Texture* snakeTex = loadTexture("res/gfx/snakeTex.png", renderer);
 	SDL_Texture* fruitTex = loadTexture("res/gfx/fruitTex.png", renderer);
+	Mix_Chunk* munch = loadSoundEffect("res/dev/munch.mp3");
 	std::vector<Fruit> fruits;
 	int frameCount = 0;
 
@@ -155,7 +163,10 @@ int main(int argc, char *argv[])
 				fruits.erase(fruits.begin() + i);
 
 			if (snake.getPos().getX() + size > fruits[i].getPos().getX() && snake.getPos().getX() < fruits[i].getPos().getX() + size && snake.getPos().getY() + size > fruits[i].getPos().getY() && snake.getPos().getY() < fruits[i].getPos().getY() + size)
+			{
 				fruits.erase(fruits.begin() + i);
+				Mix_PlayChannel(-1, munch, 0);
+			}
 
 			render(renderer, fruitTex, fruits[i].getPos(), Vector2f(size, size));
 		} 
@@ -166,8 +177,14 @@ int main(int argc, char *argv[])
 		std::cout << frameCount << std::endl;
 	}
 
+	Mix_FreeChunk(munch);
+	SDL_DestroyTexture(fruitTex);
 	SDL_DestroyTexture(snakeTex);
+
 	SDL_DestroyWindow(window);
+
+	TTF_Quit();
+	Mix_CloseAudio();
 	SDL_Quit();
 	return 0;
 }

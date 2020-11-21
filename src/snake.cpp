@@ -1,11 +1,8 @@
-#include <Stuff.hpp>
-
+#include "Utils.hpp"
 #include "Snake.hpp"
 
-Snake::Snake()
-{
-	pos = Vector2f(300-10, 350-10);
-}
+Snake::Snake(Vector2f p_pos)
+:pos(p_pos){}
 
 void Snake::setDir(Direction p_dir)
 {
