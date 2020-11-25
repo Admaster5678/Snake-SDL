@@ -234,7 +234,7 @@ int main(int argc, char *argv[])
 				render(renderer, fruitTex, fruits[i].getPos(), Vector2f(size, size));
 			} 
 
-			if (timeCount == 1750)
+			if (timeCount == 2000)
 				gameEnded = true;
 
 
