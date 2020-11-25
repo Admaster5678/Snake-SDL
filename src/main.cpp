@@ -210,7 +210,7 @@ int main(int argc, char *argv[])
 
 			SDL_RenderClear(renderer);
 
-			if (frameCount >= 300)
+			if (frameCount >= 250)
 			{
 				frameCount = 0;
 				fruits.push_back(Fruit(Vector2f(rand() % windowWidth, rand() % windowHeight)));
