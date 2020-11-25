@@ -21,6 +21,8 @@ class Vector2f
 
 void render(SDL_Renderer* p_renderer, SDL_Texture* p_tex, Vector2f p_pos, Vector2f p_size);
 
-SDL_Texture* loadTexture(const char* p_filePath, SDL_Renderer* renderer);
+SDL_Texture* loadTexture(const char* p_filePath, SDL_Renderer* p_renderer);
 
 Mix_Chunk* loadSoundEffect(const char* p_filePath);
+
+SDL_Texture* loadText(SDL_Renderer* p_renderer, const char* p_filePath, const char p_text[], SDL_Color p_color, int p_size);

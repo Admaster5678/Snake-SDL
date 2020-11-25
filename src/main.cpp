@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
 
 #include "Snake.hpp"
 #include "Utils.hpp"
@@ -67,7 +68,10 @@ int main(int argc, char *argv[])
 
 	Mix_Chunk* munch = loadSoundEffect("res/dev/munch.mp3");
 
-	//make fonts
+	SDL_Texture* winText = loadText(renderer, "res/dev/Flix-Normal.ttf", "You Win!", {0, 0, 0}, 70);
+	SDL_Texture* loseText = loadText(renderer, "res/dev/Flix-Normal.ttf", "You Lose.", {0, 0, 0}, 70);
+
+	
 	std::vector<Fruit> fruits;
 	int frameCount = 0;
 	int timeCount = 0;
@@ -87,11 +91,43 @@ int main(int argc, char *argv[])
 					case SDL_QUIT:
 						gameRunning = false;
 						break;
+					case SDL_KEYDOWN:
+						if (event.key.keysym.sym == SDLK_ESCAPE)
+							gameRunning = false;
+						break;
 				}
 			}
+
 			SDL_RenderClear(renderer);
 
+			SDL_Texture* scoreText;
+
+			char result[100]; // Depressing C string stuff
+			strcpy(result, "You Scored: "); // Some more of that
+			strcat(result, std::to_string(score).c_str()); // This just doesn't end, does it?
+			std::cout << result << std::endl;
+			int x, y;
+
+			if (score > 7)
+			{
+				SDL_QueryTexture(winText, NULL, NULL, &x, &y);
+				render(renderer, winText, Vector2f(windowWidth/2 - x/2, windowHeight/2 - y), Vector2f(x, y));
+			}else
+			{
+				SDL_QueryTexture(loseText, NULL, NULL, &x, &y);
+				render(renderer, loseText, Vector2f(windowWidth/2 - x/2, windowHeight/2 - y), Vector2f(x, y));	
+			}
+
+			scoreText = loadText(renderer, "res/dev/Flix-Normal.ttf", result, {0, 0, 0}, 50);
+			std::cout << "Passed the text formation\n";
+			SDL_QueryTexture(scoreText, NULL, NULL, &x, &y);
+			std::cout << "Passed Query\n";
+			render(renderer, scoreText, Vector2f(windowWidth/2 - x/2, windowHeight/2), Vector2f(x, y));
+			std::cout << "Passed rendering\n";
+
 			SDL_RenderPresent(renderer);
+			SDL_DestroyTexture(scoreText);
+			std::cout << "Destroyed\n";
 		}else
 		{
 			frameCount++;
@@ -174,7 +210,7 @@ int main(int argc, char *argv[])
 
 			SDL_RenderClear(renderer);
 
-			if (frameCount >= 250)
+			if (frameCount >= 300)
 			{
 				frameCount = 0;
 				fruits.push_back(Fruit(Vector2f(rand() % windowWidth, rand() % windowHeight)));
@@ -193,22 +229,26 @@ int main(int argc, char *argv[])
 					Mix_PlayChannel(-1, munch, 0);
 				}
 
-				if (timeCount == 2000)
-					gameEnded = true;
+
 
 				render(renderer, fruitTex, fruits[i].getPos(), Vector2f(size, size));
 			} 
 
+			if (timeCount == 1750)
+				gameEnded = true;
+
 
 			render(renderer, snakeTex, snake.getPos(), Vector2f(size, size));
 			SDL_RenderPresent(renderer);
-			std::cout << frameCount << std::endl;
+			std::cout << timeCount << std::endl;
 		}
 	}
 	
 	Mix_FreeChunk(munch);
 	SDL_DestroyTexture(fruitTex);
 	SDL_DestroyTexture(snakeTex);
+	SDL_DestroyTexture(winText);
+	SDL_DestroyTexture(loseText);
 
 	SDL_DestroyWindow(window);
 
