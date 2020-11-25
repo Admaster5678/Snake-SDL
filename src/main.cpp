@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
 			std::cout << result << std::endl;
 			int x, y;
 
-			if (score > 7)
+			if (score > 4)
 			{
 				SDL_QueryTexture(winText, NULL, NULL, &x, &y);
 				render(renderer, winText, Vector2f(windowWidth/2 - x/2, windowHeight/2 - y), Vector2f(x, y));
@@ -210,7 +210,7 @@ int main(int argc, char *argv[])
 
 			SDL_RenderClear(renderer);
 
-			if (frameCount >= 250)
+			if (frameCount >= 300)
 			{
 				frameCount = 0;
 				fruits.push_back(Fruit(Vector2f(rand() % windowWidth, rand() % windowHeight)));
